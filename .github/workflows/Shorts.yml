@@ -1,11 +1,22 @@
-name: Shorts Automation Test
+name: YouTube Shorts Automation
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * *"
 
 jobs:
-  test:
+  generate:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Test automation
-        run: echo "GitHub Actions is working!"
+      - name: Get repository files
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run Shorts generator
+        run: node src/generate.js
