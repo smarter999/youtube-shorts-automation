@@ -1,10 +1,12 @@
 {
   "name": "youtube-shorts-automation",
   "version": "1.0.0",
-  "description": "Zero-budget YouTube Shorts automation project",
+  "description": "Zero-budget YouTube Shorts automation",
   "type": "module",
+  "private": true,
   "scripts": {
-    "generate": "node src/generate.js"
-  },
-  "dependencies": {}
+    "generate": "node src/generate.js",
+    "render": "node src/render.js",
+    "build": "npm run generate && npm run render"
+  }
 }
