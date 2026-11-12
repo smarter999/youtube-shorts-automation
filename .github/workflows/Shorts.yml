@@ -1,3 +1,4 @@
+
 name: YouTube Shorts Automation
 
 on:
@@ -5,12 +6,16 @@ on:
   schedule:
     - cron: "0 3 * * *"
 
+permissions:
+  contents: read
+
 jobs:
-  generate:
+  generate-shorts:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
-      - name: Get repository files
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -18,5 +23,21 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Run Shorts generator
-        run: node src/generate.js
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Verify FFmpeg
+        run: ffmpeg -version
+
+      - name: Generate script and video
+        run: npm run build
+
+      - name: Save generated files
+        uses: actions/upload-artifact@v4
+        with:
+          name: youtube-shorts-output
+          path: output/
+          if-no-files-found: error
+          retention-days: 7
